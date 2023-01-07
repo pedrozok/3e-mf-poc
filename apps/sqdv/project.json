@@ -1,0 +1,99 @@
+{
+  "name": "sqdv",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/sqdv/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/sqdv",
+        "index": "apps/sqdv/src/index.html",
+        "baseHref": "/",
+        "main": "apps/sqdv/src/main.ts",
+        "polyfills": "apps/sqdv/src/polyfills.ts",
+        "tsConfig": "apps/sqdv/tsconfig.app.json",
+        "assets": ["apps/sqdv/src/favicon.ico", "apps/sqdv/src/assets"],
+        "styles": ["apps/sqdv/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "apps/sqdv/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/sqdv/src/environments/environment.ts",
+              "with": "apps/sqdv/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/sqdv/webpack.config.prod.js"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "sqdv:build",
+        "hmr": true,
+        "port": 4202
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "sqdv:build:development"
+        },
+        "production": {
+          "buildTarget": "sqdv:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/sqdv/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/sqdv/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/web:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "sqdv:build",
+        "port": 4202
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "sqdv:build:development"
+        },
+        "production": {
+          "buildTarget": "sqdv:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
